@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cine di Santos · Free Films of the Catholic Saints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#101728;
+    --night-deep:#0a0f1d;
+    --gold:#c9a227;
+    --gold-bright:#e8cd7a;
+    --parchment:#f1e8d2;
+    --parchment-dim:#cfc4a8;
+    --marian:#8fa4cf;
+    --relic-red:#9a3434;
+    --card:#161f36;
+    --line:rgba(201,162,39,.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--night-deep);
+    background-image:
+      radial-gradient(1200px 600px at 50% -10%, rgba(143,164,207,.14), transparent 60%),
+      radial-gradient(900px 500px at 85% 110%, rgba(201,162,39,.08), transparent 60%);
+    color:var(--parchment);
+    font-family:'EB Garamond', Georgia, serif;
+    font-size:18px;
+    line-height:1.6;
+  }
+  a{color:var(--gold-bright);}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Header ---------- */
+  header{
+    text-align:center;
+    padding:72px 24px 48px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .halo-mark{
+    width:78px;height:78px;margin:0 auto 26px;border-radius:50%;
+    border:2px solid var(--gold);
+    box-shadow:0 0 24px rgba(201,162,39,.45), inset 0 0 14px rgba(201,162,39,.35);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold-bright);font-family:'Cinzel',serif;font-size:30px;
+  }
+  .eyebrow{
+    font-family:'Cinzel',serif;font-size:12px;letter-spacing:.42em;
+    text-transform:uppercase;color:var(--marian);
+  }
+  h1{
+    font-family:'Cinzel',serif;font-weight:700;
+    font-size:clamp(34px,6vw,62px);
+    letter-spacing:.06em;color:var(--parchment);
+    margin:14px 0 6px;
+  }
+  h1 .gilded{color:var(--gold-bright);}
+  .subtitle{
+    max-width:640px;margin:14px auto 0;color:var(--parchment-dim);
+    font-size:19px;font-style:italic;
+  }
+  .rule{
+    width:220px;height:14px;margin:30px auto 0;position:relative;
+  }
+  .rule::before,.rule::after{
+    content:"";position:absolute;top:50%;width:88px;height:1px;background:var(--line);
+  }
+  .rule::before{left:0}.rule::after{right:0}
+  .rule span{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    color:var(--gold);font-size:14px;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:center;
+    padding:30px 0 8px;
+  }
+  .search{
+    flex:1 1 340px;max-width:460px;position:relative;
+  }
+  .search input{
+    width:100%;padding:13px 18px;
+    background:rgba(241,232,210,.05);
+    border:1px solid var(--line);border-radius:2px;
+    color:var(--parchment);font-family:'EB Garamond',serif;font-size:17px;
+  }
+  .search input::placeholder{color:var(--parchment-dim);opacity:.7;}
+  .search input:focus{outline:2px solid var(--gold);outline-offset:2px;}
+  select{
+    padding:13px 16px;background:rgba(241,232,210,.05);
+    border:1px solid var(--line);border-radius:2px;
+    color:var(--parchment);font-family:'EB Garamond',serif;font-size:16px;
+    cursor:pointer;
+  }
+  select:focus{outline:2px solid var(--gold);outline-offset:2px;}
+  select option{background:var(--night);color:var(--parchment);}
+  .count{
+    width:100%;text-align:center;font-size:14px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--parchment-dim);padding-top:14px;
+    font-family:'Cinzel',serif;
+  }
+
+  /* ---------- Card grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+    gap:34px;
+    padding:44px 0 80px;
+  }
+
+  /* The retablo card: an arched niche, like a holy card lit by candlelight */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:150px 150px 4px 4px;   /* the arch */
+    padding:14px;
+    position:relative;
+    transition:transform .35s ease, box-shadow .35s ease;
+  }
+  .card-inner{
+    border:1px solid rgba(201,162,39,.25);
+    border-radius:140px 140px 2px 2px;
+    padding:30px 22px 26px;
+    height:100%;
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+  }
+  .card:hover,.card:focus-within{
+    transform:translateY(-5px);
+    box-shadow:0 18px 44px rgba(0,0,0,.55), 0 0 34px rgba(201,162,39,.13);
+  }
+  .portrait{
+    width:150px;height:150px;border-radius:50%;
+    position:relative;margin-bottom:20px;flex-shrink:0;
+  }
+  .portrait::after{        /* the halo */
+    content:"";position:absolute;inset:-9px;border-radius:50%;
+    border:2px solid var(--gold);
+    box-shadow:0 0 18px rgba(201,162,39,.35);
+    transition:box-shadow .35s ease;
+    pointer-events:none;
+  }
+  .card:hover .portrait::after{
+    box-shadow:0 0 30px rgba(232,205,122,.65);
+  }
+  .portrait img{
+    width:100%;height:100%;object-fit:cover;object-position:center 20%;
+    border-radius:50%;display:block;
+    filter:sepia(.14) contrast(1.03);
+  }
+  .monogram{
+    width:100%;height:100%;border-radius:50%;
+    background:radial-gradient(circle at 50% 30%, rgba(201,162,39,.28), rgba(16,23,40,1) 72%);
+    display:none;align-items:center;justify-content:center;flex-direction:column;
+    color:var(--gold-bright);font-family:'Cinzel',serif;
+  }
+  .monogram .initials{font-size:38px;font-weight:600;letter-spacing:.05em;}
+  .monogram .cross{font-size:16px;opacity:.8;}
+  .portrait.fallback img{display:none;}
+  .portrait.fallback .monogram{display:flex;}
+
+  .card h2{
+    font-family:'Cinzel',serif;font-weight:600;
+    font-size:21px;letter-spacing:.05em;color:var(--parchment);
+    margin-bottom:4px;line-height:1.3;
+  }
+  .years{font-style:italic;color:var(--parchment-dim);font-size:15px;margin-bottom:16px;}
+
+  dl{width:100%;margin-bottom:18px;}
+  .fact{
+    display:flex;flex-direction:column;gap:1px;
+    padding:9px 0;border-top:1px solid rgba(201,162,39,.16);
+  }
+  dt{
+    font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--marian);
+  }
+  dd{font-size:16.5px;color:var(--parchment);}
+  .feast dd{color:var(--gold-bright);}
+
+  .films{width:100%;margin-top:auto;display:flex;flex-direction:column;gap:9px;}
+  .films-label{
+    font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.3em;
+    text-transform:uppercase;color:var(--relic-red);
+    padding-bottom:2px;
+  }
+  .film{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 14px;
+    background:rgba(201,162,39,.07);
+    border:1px solid rgba(201,162,39,.3);
+    border-radius:2px;
+    text-decoration:none;color:var(--parchment);
+    font-size:15.5px;text-align:left;
+    transition:background .25s ease,border-color .25s ease;
+  }
+  .film:hover,.film:focus-visible{
+    background:rgba(201,162,39,.16);border-color:var(--gold);
+  }
+  .film:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+  .film .where{
+    font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gold-bright);white-space:nowrap;
+  }
+
+  .empty{
+    text-align:center;padding:70px 20px;color:var(--parchment-dim);
+    font-style:italic;font-size:19px;display:none;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    text-align:center;padding:42px 24px 56px;
+    color:var(--parchment-dim);font-size:15.5px;
+  }
+  footer .bless{
+    font-family:'Cinzel',serif;letter-spacing:.24em;text-transform:uppercase;
+    font-size:12px;color:var(--gold);margin-bottom:10px;
+  }
+  footer p{max-width:620px;margin:0 auto 8px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
+  @media (max-width:560px){
+    .grid{grid-template-columns:1fr;gap:26px;}
+    header{padding:52px 18px 38px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="halo-mark" aria-hidden="true">✠</div>
+  <p class="eyebrow">Communio Sanctorum</p>
+  <h1>Cine di <span class="gilded">Santos</span></h1>
+  <p class="subtitle">The lives of the saints on film. Every title below can be watched free of charge on YouTube or EWTN On Demand.</p>
+  <div class="rule" aria-hidden="true"><span>✦</span></div>
+</header>
+
+<main class="wrap">
+  <div class="toolbar">
+    <div class="search">
+      <label for="q" class="sr-only" style="position:absolute;left:-9999px">Search saints</label>
+      <input id="q" type="search" placeholder="Search a saint, a patronage, a film…" autocomplete="off">
+    </div>
+    <select id="month" aria-label="Filter by feast month">
+      <option value="">All feast months</option>
+      <option value="1">January</option><option value="2">February</option>
+      <option value="3">March</option><option value="4">April</option>
+      <option value="5">May</option><option value="6">June</option>
+      <option value="7">July</option><option value="8">August</option>
+      <option value="9">September</option><option value="10">October</option>
+      <option value="11">November</option><option value="12">December</option>
+    </select>
+    <p class="count" id="count"></p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No saint matches your search. Try another name or patronage.</p>
+</main>
+
+<footer>
+  <p class="bless">Ora pro nobis</p>
+  <p>Film links open a live search on YouTube or the EWTN On Demand library, so they keep working even when individual uploads change. Availability of full films can vary by country.</p>
+  <p>Portraits are drawn from public domain sacred art and historical photographs.</p>
+  <p style="margin-top:18px;font-size:13px;">Currently cataloguing saints A&ndash;Z, one letter at a time. <strong>Letter A</strong> is complete: every saint on the EWTN Saints A&ndash;Z list for whom a free full-length film or documentary could be verified is included below; saints without an available film were left out rather than padded with unrelated content.</p>
+</footer>
+
+<script>
+const saints = [
+  {
+    name:"St. Thérèse of Lisieux", years:"1873–1897", initials:"T",
+    feast:"October 1", month:10,
+    patron:"Missions, florists, France",
+    img:"Therese von Lisieux.jpg",
+    films:[
+      {title:"Thérèse: The Story of a Soul (film & docs)", q:"Therese of Lisieux full movie", where:"YouTube"},
+      {title:"EWTN documentaries on the Little Flower", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Bernadette Soubirous", years:"1844–1879", initials:"B",
+    feast:"April 16", month:4,
+    patron:"The sick, Lourdes, shepherds",
+    img:"Bernadette Soubirous.jpg",
+    films:[
+      {title:"The Song of Bernadette (1943)", q:"The Song of Bernadette 1943 full movie", where:"YouTube"},
+      {title:"Bernadette (1988, Jean Delannoy)", q:"Bernadette 1988 full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Faustina Kowalska", years:"1905–1938", initials:"F",
+    feast:"October 5", month:10,
+    patron:"Divine Mercy devotion",
+    img:"Faustyna Kowalska.jpg",
+    films:[
+      {title:"Faustina (1995)", q:"Faustina 1995 full movie english subtitles", where:"YouTube"},
+      {title:"Divine Mercy programs", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Maximilian Kolbe", years:"1894–1941", initials:"M",
+    feast:"August 14", month:8,
+    patron:"Prisoners, journalists, families",
+    img:"Fr.Maximilian Kolbe 1939.jpg",
+    films:[
+      {title:"Life for Life: Maximilian Kolbe (1991)", q:"Life for Life Maximilian Kolbe full movie", where:"YouTube"},
+      {title:"Maximilian: Saint of Auschwitz", q:"Maximilian Saint of Auschwitz full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. John Paul II", years:"1920–2005", initials:"JP",
+    feast:"October 22", month:10,
+    patron:"World Youth Day, families",
+    img:"JohannesPaul2-portrait.jpg",
+    films:[
+      {title:"Karol: A Man Who Became Pope (2005)", q:"Karol A Man Who Became Pope full movie", where:"YouTube"},
+      {title:"EWTN specials on John Paul II", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Pio of Pietrelcina", years:"1887–1968", initials:"P",
+    feast:"September 23", month:9,
+    patron:"Civil defense volunteers, stress relief",
+    img:"PadrePio.jpg",
+    films:[
+      {title:"Padre Pio: Miracle Man (2000)", q:"Padre Pio Miracle Man full movie english", where:"YouTube"},
+      {title:"Padre Pio documentaries", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Teresa of Calcutta", years:"1910–1997", initials:"T",
+    feast:"September 5", month:9,
+    patron:"Missionaries of Charity, the poorest of the poor",
+    img:"Mother Teresa 1.jpg",
+    films:[
+      {title:"Mother Teresa (2003, Olivia Hussey)", q:"Mother Teresa 2003 Olivia Hussey full movie", where:"YouTube"},
+      {title:"Mother Teresa documentaries", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Joan of Arc", years:"1412–1431", initials:"J",
+    feast:"May 30", month:5,
+    patron:"France, soldiers, prisoners",
+    img:"Joan of Arc miniature graded.jpg",
+    films:[
+      {title:"Joan of Arc (1948, Ingrid Bergman)", q:"Joan of Arc 1948 Ingrid Bergman full movie", where:"YouTube"},
+      {title:"The Passion of Joan of Arc (1928, silent classic)", q:"The Passion of Joan of Arc 1928 full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Francis of Assisi", years:"1181–1226", initials:"F",
+    feast:"October 4", month:10,
+    patron:"Animals, ecology, Italy",
+    img:"Cimabue Saint Francis Fragment.jpg",
+    films:[
+      {title:"Saint Francis (2002 TV film)", q:"Saint Francis 2002 full movie english", where:"YouTube"},
+      {title:"Clare and Francis (2007)", q:"Clare and Francis 2007 full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Anthony of Padua", years:"1195–1231", initials:"A",
+    feast:"June 13", month:6,
+    patron:"Lost items, the poor, travelers",
+    img:"Anthony of Padua.jpg",
+    films:[
+      {title:"St. Anthony: The Miracle Worker of Padua (2002)", q:"Saint Anthony Miracle Worker of Padua full movie", where:"YouTube"},
+      {title:"EWTN programs on St. Anthony", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Augustine of Hippo", years:"354–430", initials:"A",
+    feast:"August 28", month:8,
+    patron:"Theologians, printers, brewers",
+    img:"Saint Augustine by Philippe de Champaigne.jpg",
+    films:[
+      {title:"Restless Heart: The Confessions of Augustine (2010)", q:"Restless Heart Augustine full movie", where:"YouTube"},
+      {title:"Augustine of Hippo (1972, Roberto Rossellini)", q:"Agostino d'Ippona 1972 Rossellini full movie english subtitles", where:"YouTube"},
+      {title:"Augustine specials on EWTN", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Rita of Cascia", years:"1381–1457", initials:"R",
+    feast:"May 22", month:5,
+    patron:"Impossible causes, difficult marriages",
+    img:"Santa Rita da Cascia.jpg",
+    films:[
+      {title:"Saint Rita (2004 TV film)", q:"Saint Rita 2004 full movie english", where:"YouTube"},
+      {title:"EWTN programs on St. Rita", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Joseph of Cupertino", years:"1603–1663", initials:"J",
+    feast:"September 18", month:9,
+    patron:"Pilots, students, test takers",
+    img:"St Joseph of Cupertino.jpg",
+    films:[
+      {title:"The Reluctant Saint (1962)", q:"The Reluctant Saint 1962 full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Vincent de Paul", years:"1581–1660", initials:"V",
+    feast:"September 27", month:9,
+    patron:"Charities, volunteers, hospitals",
+    img:"Vincent de Paul.jpg",
+    films:[
+      {title:"Monsieur Vincent (1947, Oscar winner)", q:"Monsieur Vincent 1947 full movie english subtitles", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Damien of Molokai", years:"1840–1889", initials:"D",
+    feast:"May 10", month:5,
+    patron:"People with leprosy, outcasts, Hawaii",
+    img:"Father Damien.jpg",
+    films:[
+      {title:"Molokai: The Story of Father Damien (1999)", q:"Molokai The Story of Father Damien full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Thomas More", years:"1478–1535", initials:"T",
+    feast:"June 22", month:6,
+    patron:"Lawyers, statesmen, politicians",
+    img:"Hans Holbein, the Younger - Sir Thomas More - Google Art Project.jpg",
+    films:[
+      {title:"A Man for All Seasons (1966)", q:"A Man for All Seasons 1966 full movie", where:"YouTube"},
+      {title:"EWTN programs on Thomas More", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Philip Neri", years:"1515–1595", initials:"P",
+    feast:"May 26", month:5,
+    patron:"Joy, humor, Rome",
+    img:"Philip Neri.jpg",
+    films:[
+      {title:"St. Philip Neri: I Prefer Heaven (2010)", q:"Saint Philip Neri I Prefer Heaven full movie english", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Juan Diego", years:"1474–1548", initials:"JD",
+    feast:"December 9", month:12,
+    patron:"Indigenous peoples of the Americas",
+    img:"Juan Diego.jpg",
+    films:[
+      {title:"Guadalupe (2006)", q:"Guadalupe 2006 full movie english subtitles", where:"YouTube"},
+      {title:"Juan Diego: Messenger of Guadalupe (animated)", q:"Juan Diego Messenger of Guadalupe full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"Sts. Francisco & Jacinta Marto", years:"† 1919 · 1920", initials:"FJ",
+    feast:"February 20", month:2,
+    patron:"The children of Fátima, young people",
+    img:"Jacinta and Francisco Marto.jpg",
+    films:[
+      {title:"The 13th Day (2009)", q:"The 13th Day 2009 Fatima full movie", where:"YouTube"},
+      {title:"Fátima documentaries", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Carlo Acutis", years:"1991–2006", initials:"C",
+    feast:"October 12", month:10,
+    patron:"The internet, computer programmers, youth",
+    img:"Carlo Acutis.jpg",
+    films:[
+      {title:"Carlo Acutis: Roads to Reality (docs)", q:"Carlo Acutis documentary full", where:"YouTube"},
+      {title:"EWTN specials on Carlo Acutis", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+
+  /* ---------- Letter A: EWTN Saints A-to-Z ---------- */
+  {
+    name:"St. André Bessette", years:"1845–1937", initials:"AB",
+    feast:"January 6", month:1,
+    patron:"Canada, caregivers, the sick, the Congregation of Holy Cross",
+    img:"Saint André Bessette.jpg",
+    films:[
+      {title:"God's Doorkeeper: St. André of Montreal (2010 documentary)", q:"God's Doorkeeper St Andre of Montreal full documentary", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Andrew Kim Taegon", years:"1821–1846", initials:"AK",
+    feast:"September 20", month:9,
+    patron:"Korean clergy, Korea",
+    img:"Andrew Kim Tae-gŏn.jpg",
+    films:[
+      {title:"A Birth (2022, Yoon Shi-yoon)", q:"A Birth 2022 Andrew Kim Taegon full movie", where:"YouTube"},
+      {title:"EWTN broadcast of A Birth", q:"", where:"EWTN", ewtn:true}
+    ]
+  },
+  {
+    name:"St. Anthony Mary Claret", years:"1807–1870", initials:"AC",
+    feast:"October 24", month:10,
+    patron:"Catholic press, weavers, the Claretian Missionaries",
+    img:"Antonio María Claret, c.1860.jpg",
+    films:[
+      {title:"Slaves and Kings: The Story of St. Anthony Mary Claret (2022)", q:"Slaves and Kings Anthony Mary Claret full movie", where:"YouTube"}
+    ]
+  },
+  {
+    name:"St. Athanasius of Alexandria", years:"c. 296–373", initials:"A",
+    feast:"May 2", month:5,
+    patron:"Theologians, Doctors of the Church",
+    img:"St. Athanasius Icon (10335730335).jpg",
+    films:[
+      {title:"Doctors of the Church: St. Athanasius of Alexandria (EWTN)", q:"Doctors of the Church St Athanasius of Alexandria EWTN full episode", where:"YouTube"},
+      {title:"EWTN On Demand library", q:"", where:"EWTN", ewtn:true}
+    ]
+  }
+];
+
+const EWTN_URL = "https://ondemand.ewtn.com/free";
+const grid = document.getElementById("grid");
+const q = document.getElementById("q");
+const month = document.getElementById("month");
+const count = document.getElementById("count");
+const empty = document.getElementById("empty");
+
+function commonsUrl(file){
+  return "https://commons.wikimedia.org/wiki/Special:FilePath/" +
+         encodeURIComponent(file) + "?width=400";
+}
+function ytSearch(query){
+  return "https://www.youtube.com/results?search_query=" + encodeURIComponent(query);
+}
+
+function render(){
+  const term = q.value.trim().toLowerCase();
+  const m = month.value;
+  grid.innerHTML = "";
+  let shown = 0;
+
+  saints.forEach(s=>{
+    const hay = (s.name + " " + s.patron + " " + s.feast + " " +
+                 s.films.map(f=>f.title).join(" ")).toLowerCase();
+    if(term && !hay.includes(term)) return;
+    if(m && s.month !== Number(m)) return;
+    shown++;
+
+    const card = document.createElement("article");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="portrait">
+          <img src="${commonsUrl(s.img)}" alt="Portrait of ${s.name}" loading="lazy"
+               onerror="this.parentElement.classList.add('fallback')">
+          <div class="monogram" aria-hidden="true">
+            <span class="cross">✠</span>
+            <span class="initials">${s.initials}</span>
+          </div>
+        </div>
+        <h2>${s.name}</h2>
+        <p class="years">${s.years}</p>
+        <dl>
+          <div class="fact feast"><dt>Feast Day</dt><dd>${s.feast}</dd></div>
+          <div class="fact"><dt>Patron Of</dt><dd>${s.patron}</dd></div>
+        </dl>
+        <div class="films">
+          <span class="films-label">Watch Free</span>
+          ${s.films.map(f=>`
+            <a class="film" target="_blank" rel="noopener"
+               href="${f.ewtn ? EWTN_URL : ytSearch(f.q)}">
+              <span>${f.title}</span>
+              <span class="where">${f.where}</span>
+            </a>`).join("")}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+
+  empty.style.display = shown ? "none" : "block";
+  count.textContent = shown + (shown === 1 ? " saint" : " saints");
+}
+
+q.addEventListener("input", render);
+month.addEventListener("change", render);
+render();
+</script>
+</body>
+</html>
