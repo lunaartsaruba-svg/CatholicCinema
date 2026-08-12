@@ -282,6 +282,9 @@ const saints = [
     patron:"Missions, florists, France",
     img:"Therese von Lisieux.jpg",
     films:[
+      {title:"Miracle of St. Thérèse (full movie)", url:"https://youtu.be/LEO8tIB6VkQ", where:"YouTube"},
+      {title:"Santa Teresita del Niño Jesús — Parte 1 (Spanish)", url:"https://www.youtube.com/watch?v=Qi3NBAU68Rw", where:"YouTube"},
+      {title:"Santa Teresita del Niño Jesús — Parte 2 (Spanish)", url:"https://www.youtube.com/watch?v=8bV3WS1t31s&list=PL7EJ73LaK2_ZHFzYoEdapGJAJUSiat5Ia&index=18", where:"YouTube"},
       {title:"Thérèse: The Story of a Soul (film & docs)", q:"Therese of Lisieux full movie", where:"YouTube"},
       {title:"EWTN documentaries on the Little Flower", q:"", where:"EWTN", ewtn:true}
     ]
@@ -565,7 +568,7 @@ function render(){
           <span class="films-label">Watch Free</span>
           ${s.films.map(f=>`
             <a class="film" target="_blank" rel="noopener"
-               href="${f.ewtn ? EWTN_URL : ytSearch(f.q)}">
+               href="${f.url ? f.url : (f.ewtn ? EWTN_URL : ytSearch(f.q))}">
               <span>${f.title}</span>
               <span class="where">${f.where}</span>
             </a>`).join("")}
